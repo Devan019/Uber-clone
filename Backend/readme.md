@@ -93,7 +93,7 @@ This endpoint retrieves the authenticated user's profile information.
           "fname": "First Name",
           "lname": "Last Name"
       },
-      // ... other user fields ...
+      
   }
   ```
 
