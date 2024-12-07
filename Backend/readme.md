@@ -74,7 +74,7 @@ This is a backend API built with Node.js, Express, and MongoDB. It provides user
     - On success: Returns a message indicating the user has logged out.
     - On error: Returns unauthorized status if the user is not authenticated.
 
-## User Profile Endpoint
+### User Profile
 
 - **GET**  `/users/profile`
 
