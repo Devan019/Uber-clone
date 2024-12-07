@@ -53,7 +53,7 @@ module.exports.profile = async (req, res) => {
 }
 
 module.exports.logout = async (req, res) => {
-    res.clearCookie('token');
+   
     const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
     if (token) {
         try {
@@ -62,6 +62,7 @@ module.exports.logout = async (req, res) => {
             })
 
             const saveblocklist = await blacklist.save();
+            res.clearCookie('token');
             return res.json({mess : "user logout!", saveblocklist});
         } catch (error) {
             return res.status(402).json(error.message);

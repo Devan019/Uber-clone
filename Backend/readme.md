@@ -100,6 +100,59 @@ This endpoint retrieves the authenticated user's profile information.
 - **401 Unauthorized**: If the user is not authenticated.
 - **500 Internal Server Error**: If there is an error retrieving the user information.
 
+### Captain Registration
+- **POST** `/captains/register`
+  - Request Body:
+    ```json
+    {
+      "fullname": {
+        "fname": "John",
+        "lname": "Doe"
+      },
+      "email": "john.doe@example.com",
+      "password": "yourpassword",
+      "vehicle": {
+        "color": "red",
+        "plate": "ABC123",
+        "capacity": 4,
+        "type": "car"
+      },
+      "status": "active",
+      "location": {
+        "ltd": 12.34,
+        "lang": 56.78
+      }
+    }
+    ```
+  - Response:
+    - On success: Returns the newly created captain data.
+    - On error: Returns validation errors or existing captain message.
+
+### Captain Login
+- **POST** `/captains/login`
+  - Request Body:
+    ```json
+    {
+      "email": "john.doe@example.com",
+      "password": "yourpassword"
+    }
+    ```
+  - Response:
+    - On success: Returns authentication token and captain data.
+    - On error: Returns validation errors or invalid credentials message.
+
+### Captain Profile
+- **GET** `/captains/profile`
+  - Response:
+    - **200 OK**: Returns the captain's profile information.
+    - **401 Unauthorized**: If the captain is not authenticated.
+
+### Captain Logout
+- **GET** `/captains/logout`
+  - Response:
+    - On success: Returns a message indicating the captain has logged out.
+    - On error: Returns unauthorized status if the captain is not authenticated.
+
 ## Environment Variables
 
 - `DB_CONNECTION`: MongoDB connection string.
