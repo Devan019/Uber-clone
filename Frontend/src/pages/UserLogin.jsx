@@ -1,18 +1,31 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, {  useContext, useState } from 'react'
+import { Link , useNavigate} from 'react-router-dom'
+import axios from 'axios'
+import { CreateUserContext } from '../context/UserContext'
+
 
 const UserLogin = () => {
+  const navigate = useNavigate()
   const [user, setuser] = useState({
     email: '',
     password: '',
   })
+  const {globalUser , setglobaluser} = useContext(CreateUserContext)
+  // console.log(globalUser,setglobaluser)
+  
   return (
     <div className='p-7 h-screen flex flex-col justify-between'>
       <div>
         <img className='w-16 mb-10' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYQy-OIkA6In0fTvVwZADPmFFibjmszu2A0g&s" alt="" />
 
-        <form onSubmit={(e) => {
+        <form onSubmit={async(e) => {
             e.preventDefault();
+            const api = await axios.post(`${import.meta.env.VITE_URI}/users/login` , user);
+            const data = await api.data;
+            console.log(data)
+            if(data.token){
+              navigate('/')
+            }
             setuser({
               email : '',
               password : ''

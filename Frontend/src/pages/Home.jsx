@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { CreateUserContext } from '../context/UserContext'
 const Home = () => {
+  const {user} = useContext(CreateUserContext)
+  console.log(user)
   return (
     <div className='flex flex-col justify-between h-screen relative'>
       <img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" className='w-1/2' alt="" />

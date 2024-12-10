@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link , Navigate, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 const UserSignup = () => {
+  const navigate = useNavigate()
   const [user, setuser] = useState({
     fullname : {
       fname : '',
@@ -15,8 +17,15 @@ const UserSignup = () => {
         <div>
           <img className='w-16 mb-10' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYQy-OIkA6In0fTvVwZADPmFFibjmszu2A0g&s" alt="" />
 
-          <form onSubmit={(e) => {
+          <form onSubmit={async(e) => {
+            e.preventDefault()
             // submitHandler(e)
+            const api = await axios.post(`${import.meta.env.VITE_URI}/users/register` , user);
+            const data = await api.data;
+            console.log(data)
+            if(data.Token){
+              navigate("/login");
+            }
           }}>
 
             <h3 className='text-lg w-1/2  font-medium mb-2'>What's your name</h3>
@@ -74,6 +83,7 @@ const UserSignup = () => {
             />
 
             <button
+            type='submit'
               className='bg-[#111] text-white font-semibold mb-3 rounded-lg px-4 py-2 w-full text-lg placeholder:text-base'
             >Create account</button>
 
