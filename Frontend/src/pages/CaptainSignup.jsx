@@ -1,29 +1,41 @@
-import React , {useState} from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
+
 const CaptainSignup = () => {
-    const [Captain, setCaptain] = useState({
-        email : '',
-        password : '',
-        fullname : {
-            fname : '',
-            lname : ''
-        },
-        Vehicle : {
-            color : '',
-            plate : '',
-            capacity : '',
-            type : ''
-        }
-      })
+  const [Captain, setCaptain] = useState({
+    email: '',
+    password: '',
+    fullname: {
+      fname: '',
+      lname: ''
+    },
+    Vehicle: {
+      color: '',
+      plate: '',
+      capacity: '',
+      type: ''
+    }
+  })
   return (
     <div className='py-5 px-5 h-screen flex flex-col justify-between'>
       <div>
         <img className='w-20 mb-3' src="https://www.svgrepo.com/show/505031/uber-driver.svg" alt="" />
 
-        <form onSubmit={(e) => {
-        //   submitHandler(e)
-            e.preventDefault();
-            console.log(Captain)
+        <form onSubmit={async (e) => {
+          //   submitHandler(e)
+          e.preventDefault();
+          const api = await axios.post(`${import.meta.env.VITE_URI}/captains/register`, Captain);
+          const data = await api.data;
+          console.log(data);
+          if (data.Token) {
+            localStorage.setItem("captainSignup", true);
+            navigate("/captain-login");
+          }
+          if(data.err){
+            Toast.fail(data.message , 500)
+          }
+
         }}>
 
           <h3 className='text-lg w-full  font-medium mb-2'>What's our Captain's name</h3>
@@ -34,11 +46,13 @@ const CaptainSignup = () => {
               type="text"
               placeholder='First name'
               value={Captain.fullname.fname}
-              onChange={(evt)=>{
-                setCaptain({...Captain , fullname:{
+              onChange={(evt) => {
+                setCaptain({
+                  ...Captain, fullname: {
                     ...Captain.fullname,
-                    fname : evt.target.value,
-                }})
+                    fname: evt.target.value,
+                  }
+                })
               }}
             />
             <input
@@ -47,11 +61,13 @@ const CaptainSignup = () => {
               type="text"
               placeholder='Last name'
               value={Captain.fullname.lname}
-              onChange={(evt)=>{
-                setCaptain({...Captain , fullname:{
+              onChange={(evt) => {
+                setCaptain({
+                  ...Captain, fullname: {
                     ...Captain.fullname,
-                    lname : evt.target.value,
-                }})
+                    lname: evt.target.value,
+                  }
+                })
               }}
             />
           </div>
@@ -63,9 +79,9 @@ const CaptainSignup = () => {
             type="email"
             placeholder='email@example.com'
             value={Captain.email}
-              onChange={(evt)=>{
-                setCaptain({...Captain , email:evt.target.value})
-              }}
+            onChange={(evt) => {
+              setCaptain({ ...Captain, email: evt.target.value })
+            }}
           />
 
           <h3 className='text-lg font-medium mb-2'>Enter Password</h3>
@@ -75,9 +91,9 @@ const CaptainSignup = () => {
             required type="password"
             placeholder='password'
             value={Captain.password}
-              onChange={(evt)=>{
-                setCaptain({...Captain , password:evt.target.value})
-              }}
+            onChange={(evt) => {
+              setCaptain({ ...Captain, password: evt.target.value })
+            }}
           />
 
           <h3 className='text-lg font-medium mb-2'>Vehicle Information</h3>
@@ -88,11 +104,13 @@ const CaptainSignup = () => {
               type="text"
               placeholder='Vehicle Color'
               value={Captain.Vehicle.color}
-              onChange={(evt)=>{
-                setCaptain({...Captain , Vehicle:{
+              onChange={(evt) => {
+                setCaptain({
+                  ...Captain, Vehicle: {
                     ...Captain.Vehicle,
-                    color : evt.target.value
-                }})
+                    color: evt.target.value
+                  }
+                })
               }}
             />
             <input
@@ -101,11 +119,13 @@ const CaptainSignup = () => {
               type="text"
               placeholder='Vehicle Plate'
               value={Captain.Vehicle.plate}
-              onChange={(evt)=>{
-                setCaptain({...Captain , Vehicle:{
+              onChange={(evt) => {
+                setCaptain({
+                  ...Captain, Vehicle: {
                     ...Captain.Vehicle,
-                    plate : evt.target.value
-                }})
+                    plate: evt.target.value
+                  }
+                })
               }}
             />
           </div>
@@ -116,22 +136,26 @@ const CaptainSignup = () => {
               type="number"
               placeholder='Vehicle Capacity'
               value={Captain.Vehicle.capacity}
-              onChange={(evt)=>{
-                setCaptain({...Captain , Vehicle:{
+              onChange={(evt) => {
+                setCaptain({
+                  ...Captain, Vehicle: {
                     ...Captain.Vehicle,
-                    capacity : evt.target.value
-                }})
+                    capacity: evt.target.value
+                  }
+                })
               }}
             />
             <select
               required
               className='bg-[#eeeeee] w-1/2 rounded-lg px-4 py-2 border text-lg placeholder:text-base'
               value={Captain.Vehicle.type}
-              onChange={(evt)=>{
-                setCaptain({...Captain , Vehicle:{
+              onChange={(evt) => {
+                setCaptain({
+                  ...Captain, Vehicle: {
                     ...Captain.Vehicle,
-                    type : evt.target.value
-                }})
+                    type: evt.target.value
+                  }
+                })
               }}
             >
               <option value="" disabled>Select Vehicle Type</option>

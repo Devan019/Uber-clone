@@ -25,7 +25,7 @@ module.exports.loginCaptain = async (req, res) => {
     try {
         const errs = validationResult(req);
         if (!errs.isEmpty()) {
-            return res.status(401).json(errs);
+            return res.json({ message :  errs , err : true});
         }
 
         const { email, password } = req.body;
@@ -34,24 +34,24 @@ module.exports.loginCaptain = async (req, res) => {
         const CheckCaptain = await captainModel.findOne({ email }).select('+password');
 
         if (!CheckCaptain) {
-            return res.status(402).json("Captain is not present");
+            return res.json({message : "Captain is not present" , err : true});
         }
 
         const checkPassword = await CheckCaptain.comparePassword(password);
 
 
         if (!checkPassword) {
-            return res.status(402).json("Captain is not present");
+            return res.json({message : "Captain is not present" , err : true});
         }
 
         const token = CheckCaptain.getAuthToken();
 
         if (!token) {
-            return res.status(402).json("error at server");
+            return res.json({message : "server fail" , err : true});
         }
 
         res.cookie('token', token);
-        return res.json({
+        return res.status(201).json({
             msg: "login sucessfully",
             token,
             CheckCaptain

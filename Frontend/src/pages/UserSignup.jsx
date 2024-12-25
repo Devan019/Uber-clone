@@ -20,10 +20,12 @@ const UserSignup = () => {
           <form onSubmit={async(e) => {
             e.preventDefault()
             // submitHandler(e)
+            Toast.loading("signup process...")
             const api = await axios.post(`${import.meta.env.VITE_URI}/users/register` , user);
             const data = await api.data;
             console.log(data)
             if(data.Token){
+              localStorage.setItem("signup" , true)
               navigate("/login");
             }
           }}>

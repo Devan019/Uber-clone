@@ -6,8 +6,8 @@ const server = http.createServer(app);
 const connection = require('./db/db.connection');
 
 connection()
-
-server.listen(3000 , () => {
- console.log(`http://localhost:3000`); 
+const port = 4000 || process.env.PORT
+server.listen(port , () => {
+ console.log(`http://localhost:${port}`); 
 }
 );

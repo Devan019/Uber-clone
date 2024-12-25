@@ -1,10 +1,16 @@
-import React, {  useContext, useState } from 'react'
+import React, {  useContext, useEffect, useState } from 'react'
 import { Link , useNavigate} from 'react-router-dom'
 import axios from 'axios'
 import { CreateUserContext } from '../context/UserContext'
-
+import Toast from 'light-toast';
 
 const UserLogin = () => {
+  useEffect(()=>{
+    if(localStorage.getItem("signup")){
+      Toast.success("account sucessfully created" , 1000);
+      localStorage.removeItem("signup")
+    }
+  })
   const navigate = useNavigate()
   const [user, setuser] = useState({
     email: '',
@@ -20,11 +26,18 @@ const UserLogin = () => {
 
         <form onSubmit={async(e) => {
             e.preventDefault();
+            Toast.loading("login process...")
             const api = await axios.post(`${import.meta.env.VITE_URI}/users/login` , user);
             const data = await api.data;
             console.log(data)
             if(data.token){
-              navigate('/')
+              localStorage.setItem("token" , data.token);
+              localStorage.setItem("login" , true);
+              Toast.hide();
+              navigate('/home')
+            }
+            if(data.err){
+              Toast.fail(data.message , 500)
             }
             setuser({
               email : '',
