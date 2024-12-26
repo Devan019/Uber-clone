@@ -33,7 +33,7 @@ const CaptainLogin = () => {
             localStorage.setItem("captainlogin" , true);
             console.log("in")
             Toast.hide();
-            navigate('/home')
+            navigate('/captain-home')
           }
           if(data.err){
             Toast.fail(data.message , 500)

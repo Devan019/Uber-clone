@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import LocationPanel from './LocationPanel'
-import VehiclePanel from './VehicalPanal'
-import ConfirmRide from './ConformRide'
-import LookingForDriver from './LookingForDriver'
+import LocationPanel from '../components/LocationPanel'
+import VehiclePanel from '../components/VehicalPanal'
+import ConfirmRide from '../components/ConformRide'
+import LookingForDriver from '../components/LookingForDriver'
 
 const HomeMain = () => {
     const pannelRef = useRef(null)

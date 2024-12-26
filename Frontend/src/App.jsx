@@ -5,7 +5,8 @@ import UserSignup from './pages/UserSignup'
 import CaptainSignup from './pages/CaptainSignup'
 import CaptainLogin from './pages/CaptainLogin'
 import Auth from './components/auth'
-import HomeMain from './components/HomeMain'
+import HomeMain from './pages/HomeMain'
+import CaptainHome from './pages/CaptainHome'
 function App() {
 
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path='/signup' element={<UserSignup />} />
         <Route path='/captain-signup' element={<CaptainSignup />} />
         <Route path='/captain-login' element={<CaptainLogin />} />
+        <Route path='/captain-home' element={<CaptainHome />} />
       </Routes>
     </>
   )
