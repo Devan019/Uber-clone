@@ -7,6 +7,7 @@ import CaptainLogin from './pages/CaptainLogin'
 import Auth from './components/auth'
 import HomeMain from './pages/HomeMain'
 import CaptainHome from './pages/CaptainHome'
+import CaptainRiding from './pages/CaptainRiding'
 function App() {
 
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path='/captain-signup' element={<CaptainSignup />} />
         <Route path='/captain-login' element={<CaptainLogin />} />
         <Route path='/captain-home' element={<CaptainHome />} />
+        <Route path='/captain-ride' element={< CaptainRiding/>} />
       </Routes>
     </>
   )

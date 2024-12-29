@@ -5,6 +5,7 @@ import RideNotification from '../components/RideNotification';
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import ConformCaptainRide from '../components/ConformCaptainRide';
+import FinishRide from '../components/FinishRide';
 
 const CaptainHome = () => {
   const [showRideNotification, setShowRideNotification] = useState(false);
@@ -16,46 +17,57 @@ const CaptainHome = () => {
   useGSAP(()=>{
     if(showRideNotification){
         gsap.to(rideRef.current,{
-            height: '100%',
             onStart : ()=>{
-              console.log(rideRef.current)
-              rideRef.current.classList.remove('hidden')
+              rideRef.current.classList.remove('overflow-hidden')
             },
-            top : '0',
-            zIndex : 9
+            top:0,
+            height : '100%',
         })
     }else{
         gsap.to(rideRef.current,{
-            height: '-10%'
+          onStart : () => {
+            ConfromRideRef.current.classList.add('overflow-hidden')
+          },
+            top : '100%',
+            height : '0%',
         })
     }
   } , [showRideNotification])
 
   useGSAP(()=>{
-    console.log(showConformRide)
     if(showConformRide){
         gsap.to(ConfromRideRef.current,{
-            height: '80%',
-            
+          onStart : ()=>{
+            ConfromRideRef.current.classList.remove('overflow-hidden')
+          },
+          top:0,
+          height : '100%',
         })
     }else{
+      
         gsap.to(ConfromRideRef.current,{
-            height: '-10%'
+          onStart : () => {
+            ConfromRideRef.current.classList.add('overflow-hidden')
+          },
+            top : '100%',
+            height : '0%'
         })
     }
   } , [showConformRide])
+
+
 
   useEffect(() => {
     setTimeout(() => {
       setShowRideNotification(true);
     }, 1000);
     
-  } , [])
+  } , [showRideNotification])
   
 
   return (
     <div className="h-screen">
-      <div className="fixed p-6 top-0 flex items-center justify-between w-screen">
+      <div className="fixed  p-6 top-0 flex items-center justify-between w-screen">
         <img
           className="w-16"
           src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"
@@ -75,18 +87,22 @@ const CaptainHome = () => {
           alt=""
         />
       </div>
-      <div className="h-2/5 p-6">
+      <div className="h-2/5 z-10 p-6">
         <CaptainDetails />
       </div>
-      <div ref={rideRef} className="absolute hidden z-50 bg-zinc-100 w-full h-0">
+      <div ref={rideRef} className="absolute z-50 bg-zinc-100 w-full h-0 overflow-hidden">
         <RideNotification 
         setShowConformRide = {setShowConformRide}
         setShowRideNotification = {setShowRideNotification}
         />
       </div>
-      <div ref={ConfromRideRef} className='absolute hidden z-50 bg-zinc-100 w-full h-0'>
-          <ConformCaptainRide/>
+      <div ref={ConfromRideRef} className='absolute z-50 bg-zinc-100 w-full h-0 overflow-hidden'>
+          <ConformCaptainRide
+          setShowConformRide = {setShowConformRide}
+          setShowRideNotification = {setShowRideNotification}
+          />
       </div>
+      
     </div>
   );
 };
