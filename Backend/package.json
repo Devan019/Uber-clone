@@ -19,6 +19,7 @@
     "express-validator": "^7.2.0",
     "jsonwebtoken": "^9.0.2",
     "mapbox": "^1.0.0-beta10",
-    "mongoose": "^8.8.4"
+    "mongoose": "^8.8.4",
+    "@mapbox/mapbox-sdk": "^0.16.1"
   }
 }

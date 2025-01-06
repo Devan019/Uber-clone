@@ -1,5 +1,5 @@
 const { query } = require('express-validator');
-const { sendCoordinates } = require('../controllers/map.controller');
+const { sendCoordinates , getDistaceAndTime } = require('../controllers/map.controller');
 const {auth} = require('../middlewares/auth.middleware')
 const route = require('express').Router();
 
@@ -8,5 +8,10 @@ const route = require('express').Router();
 route.get("/getcors",
     query('addresh').isString().isLength({min:6})
     , auth , sendCoordinates)
+
+route.get("/getdis" , 
+    query(('origin')),
+    query(('destination'))
+    , auth , getDistaceAndTime)
 
 module.exports = route;

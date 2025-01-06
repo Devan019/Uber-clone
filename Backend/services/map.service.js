@@ -1,19 +1,40 @@
-const mapBox = require('mapbox');
-const client = new mapBox(process.env.MAPBOX_ID);
+const mapbox = require('@mapbox/mapbox-sdk/services/geocoding');
+const client = mapbox({ accessToken: process.env.MAPBOX_API_TOKEN });
 
 module.exports.getCorrinates = async({addresh}) => {
-    return new Promise(async(reslove,resject) => {
-        client.geocodeForward(addresh, function(err, data, result) {
-            const geo = result.entity;
-            const geometry = geo.features[0].geometry;
-            reslove({
-                ltd : geometry.coordinates[1],
-                lng : geometry.coordinates[0]
-            });
-          });
-    })
-      
+    
+    
+   const result = await client.forwardGeocode({
+    query : addresh,
+    limit  : 1,
+   }).send();
+
+
+   const coordinates = result.body.features[0].geometry.coordinates;
+   const ans = {
+    ltd : coordinates[0],
+    lng : coordinates[1]
+   }
+
+   return ans;
      
+}
+
+module.exports.getCorsArray = async(addresh) => {
+    // console.log("in fun " , addresh)
+    const result = await client.forwardGeocode({
+        query : addresh,
+        limit  : 1,
+        // countries: ['IN'],
+       }).send()
+
+    //    console.log(result)
+          
+       const coordinates = result.body.features[0].geometry.coordinates;
+    //    console.log(coordinates)
+       return coordinates;
+         
+    
 }
 
 
