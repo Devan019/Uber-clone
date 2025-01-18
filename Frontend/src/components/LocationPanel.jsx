@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 
-const LocationPanel = ({vehicalPanal ,setvehicalPanal}) => {
+const LocationPanel = ({vehicalPanal ,setvehicalPanal , setDestination , destination , setPickup , pickup}) => {
     const [randomPlaces , setRandomPlaces] = useState([
         "Room 101, 221B Baker Street, London, UK", 
         "Apt 5C, 123 Times Square, New York, USA",
@@ -8,6 +9,17 @@ const LocationPanel = ({vehicalPanal ,setvehicalPanal}) => {
         "Flat 12B, 1 Sydney Opera Road, Sydney, Australia",
         "Room 8, 3 Mount Fuji Lane, Tokyo, Japan",
     ]);
+
+    async function main() {
+        const api = await axios.post(`${import.meta.env.VITE_URI}/map/auto`,{})
+        const data = api.data;
+
+        setRandomPlaces(data)
+    }
+
+    useEffect(()=>{
+        
+    } , [pickup,destination])
     
     return (
         <div className='mt-12'>

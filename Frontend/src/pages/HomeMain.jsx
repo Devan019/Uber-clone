@@ -16,6 +16,9 @@ const HomeMain = () => {
     const [ridePanal , setridePanal] = useState(false)
     const [DriverPanal , setdriverPanal] = useState(false)
 
+    const [pickup, setPickup] = useState("")
+    const [destination, setDestination] = useState("")
+
     useGSAP(() => {
         if (pannel) {
             gsap.to(pannelRef.current, {
@@ -106,6 +109,8 @@ const HomeMain = () => {
                                 className='bg-[#eee] px-12 py-2 text-lg rounded-lg w-full'
                                 type="text"
                                 placeholder='Add a pick-up location'
+                                onChange={(evt)=>(setPickup(evt.target.value))}
+                                value={pickup}
                             />
                             <input
                                 onClick={() => {
@@ -113,6 +118,8 @@ const HomeMain = () => {
                                 }}
                                 className='bg-[#eee] px-12 py-2 text-lg rounded-lg w-full  mt-3'
                                 type="text"
+                                onChange={(evt)=>(setDestination(evt.target.value))}
+                                value={destination}
                                 placeholder='Enter your destination' />
                         </form>
                         <button
@@ -123,6 +130,10 @@ const HomeMain = () => {
                     </div>
                     <div ref={pannelRef} className='bg-white h-0'>
                         <LocationPanel
+                        destination = {destination}
+                        setDestination = {setDestination}
+                        pickup = {pickup}
+                        setPickup = {setPickup}
                         vehicalPanal = {vehicalPanal}
                         setvehicalPanal = {setvehicalPanal}
                         />

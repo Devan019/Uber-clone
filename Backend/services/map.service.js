@@ -38,3 +38,14 @@ module.exports.getCorsArray = async(addresh) => {
 }
 
 
+
+module.exports.getAllPlaces = async(addresh) => {
+   const result = await client.forwardGeocode({
+      query : addresh,
+      limit  : 6,
+      autocomplete: true,
+      types: ['place', 'locality', 'address'],
+     }).send()
+
+     return result;
+}
