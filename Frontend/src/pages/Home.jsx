@@ -1,22 +1,35 @@
 import React, { useContext, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { CreateUserContext } from '../context/UserContext'
 import Toast from 'light-toast'
 
 const Home = () => {
   const {user} = useContext(CreateUserContext)
+  const navigate = useNavigate();
   console.log(user)
 
   useEffect(() => {
     if(localStorage.getItem("login")){
       Toast.success("welcome to UBER!",500)
       localStorage.removeItem("login");
+      
     }else if(localStorage.getItem("captainLogin")){
       Toast.success("welcome to UBER!",500)
       localStorage.removeItem("captainLogin");
+      
     }
-  }
-  )
+  })
+
+  useEffect(()=>{
+    if(localStorage.getItem("navigateUserLogin")){
+      navigate("/captain-home")
+    }
+
+    if(localStorage.getItem("navigateUserLogin")){
+      navigate("/home")
+    }
+  })
+
   return (
     <div className='flex flex-col justify-between h-screen relative'>
       <img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" className='w-1/2' alt="" />

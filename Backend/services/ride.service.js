@@ -24,7 +24,7 @@ const getotp = (num) => {
 
     return otp;
 }
-const getFare = async(pickup, destination, vehicleType) => {
+module.exports.getFare = async(pickup, destination, vehicleType) => {
     let distance = await getDistaceAndTime({pickup,destination})
     distance = Math.floor(distance.distance / 1000)
     

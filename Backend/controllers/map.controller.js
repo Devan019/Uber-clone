@@ -74,6 +74,11 @@ module.exports.getDistaceAndTime = async({pickup, destination}) => {
 
 module.exports.getSuggestion = async(req,res) => {
     const {addresh} = req.body;
+    if(addresh == ""){
+        return res.json({
+            mess : "not vaild"
+        })
+    }
 
     const AllPlaces = await getAllPlaces(addresh)
     const all = AllPlaces.body.features

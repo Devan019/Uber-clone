@@ -4,10 +4,11 @@ const blacklistModel = require('../models/blacklist.model')
 const captainModel = require('../models/captain.model');
 
 module.exports.auth = async (req, res, next) => {
+  console.log(req.headers.authorization)
   const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
 
   if (!token) {
-    return res.status(402).json("Unauthorization");
+    return res.json("Unauthorization");
   }
 
   const blacklist = await blacklistModel.findOne({ token });

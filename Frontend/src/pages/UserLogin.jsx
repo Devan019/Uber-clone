@@ -9,6 +9,7 @@ const UserLogin = () => {
     if(localStorage.getItem("signup")){
       Toast.success("account sucessfully created" , 1000);
       localStorage.removeItem("signup")
+      
     }
   })
   const navigate = useNavigate()
@@ -33,6 +34,7 @@ const UserLogin = () => {
             if(data.token){
               localStorage.setItem("token" , data.token);
               localStorage.setItem("login" , true);
+              localStorage.setItem("navigateUserLogin" , true);
               Toast.hide();
               navigate('/home')
             }

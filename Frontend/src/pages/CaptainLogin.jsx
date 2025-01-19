@@ -31,6 +31,7 @@ const CaptainLogin = () => {
           if (data.token) {
             localStorage.setItem("token" , data.token);
             localStorage.setItem("captainlogin" , true);
+            localStorage.setItem("navigateCaptainLogin" , true);
             console.log("in")
             Toast.hide();
             navigate('/captain-home')

@@ -14,9 +14,16 @@ route.get("/getdis" ,
     query(('destination'))
     , auth , getDistaceAndTime)
 
-route.get("/getsuggestion" , 
+route.post("/getsuggestion" , 
     query(('addresh')),
-    auth  ,getSuggestion
+    auth ,getSuggestion
 )
+
+// route.post("/getsuggestion" , (req,res) => {
+//   res.json({
+//     add : req.body
+//   })
+// }
+// )
 
 module.exports = route;

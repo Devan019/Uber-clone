@@ -45,6 +45,7 @@ module.exports.getAllPlaces = async(addresh) => {
       limit  : 6,
       autocomplete: true,
       types: ['place', 'locality', 'address'],
+      countries: ['IN'],
      }).send()
 
      return result;
