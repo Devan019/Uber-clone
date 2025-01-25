@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import LocationPanel from '../components/LocationPanel'
@@ -6,6 +6,7 @@ import VehiclePanel from '../components/VehicalPanal'
 import ConfirmRide from '../components/ConformRide'
 import LookingForDriver from '../components/LookingForDriver'
 import axios, { all }  from 'axios'
+import { RideCon } from '../context/RideContext'
 
 const HomeMain = () => {
     const pannelRef = useRef(null)
@@ -24,6 +25,7 @@ const HomeMain = () => {
     const [active, setactive] = useState(null)
 
     const [fares , setfares] = useState({})
+    const {ride,setride} = useContext(RideCon);
 
     useEffect(()=>{
         async function main() {
@@ -39,6 +41,7 @@ const HomeMain = () => {
 
             if(!data.mess){
                 setsuggestions(Array(data.allSuggestions)[0])
+                
             }
         }
         main()
@@ -53,6 +56,7 @@ const HomeMain = () => {
                         Authorization : `Bearer ${localStorage.getItem('token')}`
                     },
                 })
+                
 
             const data = api.data;
 
@@ -76,8 +80,10 @@ const HomeMain = () => {
 
             const data  = api.data;
             // console.log(data.car , typeof data)
-            if(!data.mess)
+            if(!data.mess){
                 setfares(data)
+                // setride({...ride, ride:api.data});
+            }
         }
 
       if(vehicalPanal){
@@ -179,7 +185,7 @@ const HomeMain = () => {
                                 className='bg-[#eee] px-12 py-2 text-lg rounded-lg w-full'
                                 type="text"
                                 placeholder='Add a pick-up location'
-                                onChange={(evt)=>{setPickup(evt.target.value)}}
+                                onChange={(evt)=>{setPickup(evt.target.value);setride({...ride,pickup:evt.target.value});}}
                                 value={pickup}
                             />
                             <input
@@ -189,7 +195,7 @@ const HomeMain = () => {
                                 }}
                                 className='bg-[#eee] px-12 py-2 text-lg rounded-lg w-full  mt-3'
                                 type="text"
-                                onChange={(evt)=>{setDestination(evt.target.value)}}
+                                onChange={(evt)=>{setDestination(evt.target.value);setride({...ride,destination:evt.target.value})}}
                                 value={destination}
                                 placeholder='Enter your destination' />
                         </form>

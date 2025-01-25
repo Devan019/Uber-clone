@@ -2,8 +2,8 @@ import React, { createContext, useState } from 'react'
 export const CreateUserContext = createContext()
 const UserContext = ({ children }) => {
     const [globalUser, setglobaluser] = useState({
-        email : 'jaytay',
-        name : 'jaytay'
+        email : '',
+        name : ''
     })
     return (
         <div>

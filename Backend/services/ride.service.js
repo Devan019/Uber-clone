@@ -47,19 +47,12 @@ module.exports.getFare = async(pickup, destination, vehicleType) => {
 };
 
 module.exports.createRide = async({
-    user , pickup , destination , vehicleType
+    user , pickup , destination , vehicleType, fare
 }) => {
-    if(!user || !pickup || !destination || !vehicleType){
+    if(!user || !pickup || !destination || !vehicleType || !fare){
         return "not get"
     }
 
-    let fare = await getFare(pickup , destination , vehicleType);
-
-    if(isNaN(fare)){
-        return fare
-    }
-
-    console.log("fare is "  , fare)
     const otp = getotp(6)
 
     const newRide = new rideModel({

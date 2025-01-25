@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
+import { RideCon } from '../context/RideContext';
 
 const LocationPanel = ({suggestions , active ,setpickup , setdestination }) => {
     
-
+    const {ride,setride} = useContext(RideCon);
+    console.log(ride)
     function setsuggestionOnActive(ele){
         if(active == "pickup"){
             setpickup(ele.target.innerText);
+            setride({...ride,pickup:ele.target.innerText});
         }else if(active == "destination"){
             setdestination(ele.target.innerText);
+            setride({...ride,destination:ele.target.innerText});
         }
     }
     
