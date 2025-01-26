@@ -20,8 +20,8 @@ app.get("/",(req,res) => {
   res.send("hy guys!");
 })
 
-app.use("/users",userRoute)
-app.use("/captains",CaptainRoute)
+app.use("/user",userRoute)
+app.use("/captain",CaptainRoute)
 app.use("/map",MapRoute)
 app.use("/ride",RideRoute)
 

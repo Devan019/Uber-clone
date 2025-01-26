@@ -1,7 +1,8 @@
-import React, { useState , useEffect } from 'react'
+import React, { useState , useEffect, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Toast from 'light-toast'
 import axios from 'axios'
+import { createCaptaionContext } from '../context/CaptainContext'
 
 const CaptainLogin = () => {
   const navigate = useNavigate()
@@ -11,10 +12,8 @@ const CaptainLogin = () => {
       localStorage.removeItem("signup")
     }
   })
-  const [Captain, setCaptain] = useState({
-    email: '',
-    password: ''
-  })
+  const {Captain, setCaptain} = useContext(createCaptaionContext)
+  
   return (
 
     <div className='p-7 h-screen flex flex-col justify-between'>
@@ -24,9 +23,9 @@ const CaptainLogin = () => {
         <form onSubmit={async (e) => {
           e.preventDefault()
           Toast.loading("login process...")
-          const api = await axios.post(`${import.meta.env.VITE_URI}/captains/login`, Captain);
+          const api = await axios.post(`${import.meta.env.VITE_URI}/captain/login`, Captain);
           const data = await api.data;
-          console.log(data);
+          // console.log(data);
 
           if (data.token) {
             localStorage.setItem("token" , data.token);
@@ -39,7 +38,7 @@ const CaptainLogin = () => {
           if(data.err){
             Toast.fail(data.message , 500)
           }
-          setCaptain({ email: '', password: '' })
+          
         }}>
           <h3 className='text-lg font-medium mb-2'>What's your email</h3>
           <input

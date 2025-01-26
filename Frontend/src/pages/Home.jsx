@@ -1,12 +1,14 @@
 import React, { useContext, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { CreateUserContext } from '../context/UserContext'
 import Toast from 'light-toast'
 
 const Home = () => {
   const {user} = useContext(CreateUserContext)
   const navigate = useNavigate();
-  console.log(user)
+  const location =  useLocation();
+  const data = location.state;
+  console.log(navigate)
 
   useEffect(() => {
     if(localStorage.getItem("login")){
@@ -21,11 +23,11 @@ const Home = () => {
   })
 
   useEffect(()=>{
-    if(localStorage.getItem("navigateUserLogin")){
+    if(localStorage.getItem("navigateUserLogin") && !data){
       navigate("/captain-home")
     }
 
-    if(localStorage.getItem("navigateUserLogin")){
+    if(localStorage.getItem("navigateUserLogin") && !data){
       navigate("/home")
     }
   })

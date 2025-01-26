@@ -63,7 +63,6 @@ module.exports.loginCaptain = async (req, res) => {
 
 module.exports.profile = async (req, res) => {
     try {
-
         res.json(req.captain);
     }catch (error) {
         return res.status(500).json({ error: "Internal server error" });

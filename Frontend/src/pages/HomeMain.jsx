@@ -7,8 +7,11 @@ import ConfirmRide from '../components/ConformRide'
 import LookingForDriver from '../components/LookingForDriver'
 import axios, { all }  from 'axios'
 import { RideCon } from '../context/RideContext'
+import { useNavigate } from 'react-router-dom'
 
 const HomeMain = () => {
+    
+    const navigate =  useNavigate()
     const pannelRef = useRef(null)
     const vehicalRef = useRef(null)
     const conformRef = useRef(null)
@@ -156,8 +159,18 @@ const HomeMain = () => {
 
     return (
         <div>
+             
             <div className='h-screen relative overflow-hidden'>
-                <img className='w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
+                <img
+                onClick={()=>{
+                    navigate('/',{
+                        state : {logout : true}
+                    })
+                }}
+                className='z-10 w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
+                <form action="">
+                    <button className='text-2xl absolute right-4 top-4 z-10 font-bold' type='submit'>Logout</button>
+                </form>
                 <img className='w-full h-full object-cover' src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif" alt="" />
                 <div
 

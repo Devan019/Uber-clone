@@ -28,7 +28,7 @@ const UserLogin = () => {
         <form onSubmit={async(e) => {
             e.preventDefault();
             Toast.loading("login process...")
-            const api = await axios.post(`${import.meta.env.VITE_URI}/users/login` , user);
+            const api = await axios.post(`${import.meta.env.VITE_URI}/user/login` , user);
             const data = await api.data;
             console.log(data)
             if(data.token){

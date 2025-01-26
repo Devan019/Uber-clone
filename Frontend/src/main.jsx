@@ -6,16 +6,19 @@ import { BrowserRouter } from 'react-router-dom'
 import UserContext from './context/UserContext.jsx'
 import 'remixicon/fonts/remixicon.css';
 import RideContext from './context/RideContext.jsx'
+import CaptainContext from './context/CaptainContext.jsx'
 
 
 
 
 createRoot(document.getElementById('root')).render(
-  <RideContext>
-    <UserContext>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </UserContext>
-  </RideContext>
+  <CaptainContext>
+    <RideContext>
+      <UserContext>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </UserContext>
+    </RideContext>
+  </CaptainContext>
 )

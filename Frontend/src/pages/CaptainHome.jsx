@@ -1,18 +1,43 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useContext } from 'react';
+import { data, Link } from 'react-router-dom';
 import CaptainDetails from '../components/CaptainDetails';
 import RideNotification from '../components/RideNotification';
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import ConformCaptainRide from '../components/ConformCaptainRide';
 import FinishRide from '../components/FinishRide';
+import { createCaptaionContext } from '../context/CaptainContext';
+import axios from 'axios';
 
 const CaptainHome = () => {
   const [showRideNotification, setShowRideNotification] = useState(false);
   const [showConformRide, setShowConformRide] = useState(false);
   const ConfromRideRef = useRef(false)
   const rideRef =  useRef(null)
+  const {Captain , setCaptain} =  useContext(createCaptaionContext)
+  // console.log(Captain)
 
+  async function main() {
+    const api = await axios.get(`${import.meta.env.VITE_URI}/captain/profile`,{
+      headers: {
+        Authorization : `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+    const getCaptain = api.data
+    setCaptain({...Captain,
+      email : getCaptain.email,
+      fullname : getCaptain.fullname,
+      vehicle : getCaptain.vehicle,
+      status : getCaptain.status,
+      location : getCaptain.location
+    })
+    // console.log(Captain,getCaptain)
+  }
+
+  useEffect(() => {
+   main()
+  }, [])
+  
 
   useGSAP(()=>{
     if(showRideNotification){
@@ -58,9 +83,9 @@ const CaptainHome = () => {
 
 
   useEffect(() => {
-    setTimeout(() => {
-      setShowRideNotification(true);
-    }, 1000);
+    // setTimeout(() => {
+    //   setShowRideNotification(true);
+    // }, 1000);
     
   } , [showRideNotification])
   

@@ -1,22 +1,9 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-
+import CaptainContext from '../context/CaptainContext' 
 const CaptainSignup = () => {
-  const [Captain, setCaptain] = useState({
-    email: '',
-    password: '',
-    fullname: {
-      fname: '',
-      lname: ''
-    },
-    Vehicle: {
-      color: '',
-      plate: '',
-      capacity: '',
-      type: ''
-    }
-  })
+  const {Captain, setCaptain} = useContext(CaptainContext)
   return (
     <div className='py-5 px-5 h-screen flex flex-col justify-between'>
       <div>
@@ -25,7 +12,7 @@ const CaptainSignup = () => {
         <form onSubmit={async (e) => {
           //   submitHandler(e)
           e.preventDefault();
-          const api = await axios.post(`${import.meta.env.VITE_URI}/captains/register`, Captain);
+          const api = await axios.post(`${import.meta.env.VITE_URI}/captain/register`, Captain);
           const data = await api.data;
           console.log(data);
           if (data.Token) {
