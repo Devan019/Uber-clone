@@ -7,18 +7,21 @@ import UserContext from './context/UserContext.jsx'
 import 'remixicon/fonts/remixicon.css';
 import RideContext from './context/RideContext.jsx'
 import CaptainContext from './context/CaptainContext.jsx'
+import SocketContext from './context/SocketContext.jsx'
 
 
 
 
 createRoot(document.getElementById('root')).render(
-  <CaptainContext>
-    <RideContext>
-      <UserContext>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </UserContext>
-    </RideContext>
-  </CaptainContext>
+  <SocketContext>
+    <CaptainContext>
+      <RideContext>
+        <UserContext>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </UserContext>
+      </RideContext>
+    </CaptainContext>
+  </SocketContext>
 )

@@ -5,21 +5,24 @@ import LocationPanel from '../components/LocationPanel'
 import VehiclePanel from '../components/VehicalPanal'
 import ConfirmRide from '../components/ConformRide'
 import LookingForDriver from '../components/LookingForDriver'
-import axios, { all }  from 'axios'
+import axios, { all } from 'axios'
 import { RideCon } from '../context/RideContext'
 import { useNavigate } from 'react-router-dom'
-
+import { MySocketContext } from '../context/SocketContext'
+import { CreateUserContext } from '../context/UserContext'
 const HomeMain = () => {
-    
-    const navigate =  useNavigate()
+
+    const { sendMessage, reciveMessage } = useContext(MySocketContext)
+    const { globalUser, setglobaluser } = useContext(CreateUserContext)
+    const navigate = useNavigate()
     const pannelRef = useRef(null)
     const vehicalRef = useRef(null)
     const conformRef = useRef(null)
     const driverRef = useRef(null)
     const [pannel, setpannel] = useState(false)
     const [vehicalPanal, setvehicalPanal] = useState(false)
-    const [ridePanal , setridePanal] = useState(false)
-    const [DriverPanal , setdriverPanal] = useState(false)
+    const [ridePanal, setridePanal] = useState(false)
+    const [DriverPanal, setdriverPanal] = useState(false)
 
     const [pickup, setPickup] = useState("")
     const [destination, setDestination] = useState("")
@@ -27,73 +30,105 @@ const HomeMain = () => {
     const [suggestions, setsuggestions] = useState([])
     const [active, setactive] = useState(null)
 
-    const [fares , setfares] = useState({})
-    const {ride,setride} = useContext(RideCon);
+    const [fares, setfares] = useState({})
+    const { ride, setride } = useContext(RideCon);
 
-    useEffect(()=>{
-        async function main() {
-            const api = await axios.post(`${import.meta.env.VITE_URI}/map/getsuggestion` , {
-                    addresh : pickup
-                },{
-                    headers:{
-                        Authorization : `Bearer ${localStorage.getItem('token')}`
-                    },
-                })
-
-            const data = api.data;
-
-            if(!data.mess){
-                setsuggestions(Array(data.allSuggestions)[0])
-                
+    async function main() {
+        const api = await axios.get(`${import.meta.env.VITE_URI}/user/profile`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
             }
+        })
+
+        const data = api.data;
+        if (data.err) {
+            navigate('/login')
         }
-        main()
-    },[pickup])
+        
+        setglobaluser({
+            email : data.email,
+            name : data.name
+        })
 
-    useEffect(()=>{
-        async function main() {
-            const api = await axios.post(`${import.meta.env.VITE_URI}/map/getsuggestion` , {
-                    addresh : destination
-                },{
-                    headers:{
-                        Authorization : `Bearer ${localStorage.getItem('token')}`
-                    },
-                })
-                
+        localStorage.setItem('id', data._id)
+    }
 
-            const data = api.data;
-
-            if(!data.mess){
-                setsuggestions(Array(data.allSuggestions)[0])
-            }
+    useEffect(() => {
+        async function forapi() {
+            
+            await main()
+            sendMessage('join', { id: localStorage.getItem('id'), type: 'user' })
         }
-        main()
-    },[destination])
 
-    useEffect (() => {
+        forapi()
+    },[])
 
+
+
+    useEffect(() => {
         async function main() {
-            const api = await axios.post(`${import.meta.env.VITE_URI}/ride/getPrices`,{
-                pickup,destination
-            },{
+            const api = await axios.post(`${import.meta.env.VITE_URI}/map/getsuggestion`, {
+                addresh: pickup
+            }, {
                 headers: {
-                    Authorization : `Bearer ${localStorage.getItem('token')}`
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                },
+            })
+
+            const data = api.data;
+
+            if (!data.mess) {
+                setsuggestions(Array(data.allSuggestions)[0])
+
+            }
+        }
+        main()
+    }, [pickup])
+
+    useEffect(() => {
+        async function main() {
+            const api = await axios.post(`${import.meta.env.VITE_URI}/map/getsuggestion`, {
+                addresh: destination
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                },
+            })
+
+
+            const data = api.data;
+
+            if (!data.mess) {
+                setsuggestions(Array(data.allSuggestions)[0])
+            }
+        }
+        main()
+    }, [destination])
+
+    useEffect(() => {
+
+        async function main() {
+            const api = await axios.post(`${import.meta.env.VITE_URI}/ride/getPrices`, {
+                pickup, destination
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             })
 
-            const data  = api.data;
+            const data = api.data;
             // console.log(data.car , typeof data)
-            if(!data.mess){
+            if (!data.mess) {
                 setfares(data)
                 // setride({...ride, ride:api.data});
             }
         }
 
-      if(vehicalPanal){
-        main()
-      }
-    } , [vehicalPanal])
-    
+        if (vehicalPanal) {
+            main()
+        }
+    }, [vehicalPanal])
+
 
     useGSAP(() => {
         if (pannel) {
@@ -116,65 +151,65 @@ const HomeMain = () => {
     }, [pannel])
 
 
-    useGSAP(()=>{
-        if(vehicalPanal){
-            gsap.to(vehicalRef.current,{
+    useGSAP(() => {
+        if (vehicalPanal) {
+            gsap.to(vehicalRef.current, {
                 height: '70%'
             })
             setpannel(false)
-        }else{
-            gsap.to(vehicalRef.current,{
+        } else {
+            gsap.to(vehicalRef.current, {
                 height: '0%'
             })
         }
-    } , [vehicalPanal])
+    }, [vehicalPanal])
 
-    useGSAP(()=>{
-        
-        if(ridePanal){
-            gsap.to(conformRef.current,{
-                height : '70%'
+    useGSAP(() => {
+
+        if (ridePanal) {
+            gsap.to(conformRef.current, {
+                height: '70%'
             })
 
-        }else{
-            gsap.to(conformRef.current,{
-                height : '0%'
+        } else {
+            gsap.to(conformRef.current, {
+                height: '0%'
             })
         }
-    },[ridePanal])
+    }, [ridePanal])
 
-    useGSAP(()=>{
-        if(DriverPanal){
-            gsap.to(driverRef.current,{
-                height : '70%'
+    useGSAP(() => {
+        if (DriverPanal) {
+            gsap.to(driverRef.current, {
+                height: '70%'
             })
-        }else{
+        } else {
             setridePanal(false)
             setvehicalPanal(false)
-            gsap.to(driverRef.current,{
-                height : '0%'
+            gsap.to(driverRef.current, {
+                height: '0%'
             })
         }
-    },[DriverPanal])
+    }, [DriverPanal])
 
     return (
         <div>
-             
+
             <div className='h-screen relative overflow-hidden'>
                 <img
-                onClick={()=>{
-                    navigate('/',{
-                        state : {logout : true}
-                    })
-                }}
-                className='z-10 w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
+                    onClick={() => {
+                        navigate('/', {
+                            state: { logout: true }
+                        })
+                    }}
+                    className='z-10 w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
                 <form action="">
                     <button className='text-2xl absolute right-4 top-4 z-10 font-bold' type='submit'>Logout</button>
                 </form>
                 <img className='w-full h-full object-cover' src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif" alt="" />
                 <div
 
-                 className=' flex flex-col justify-end h-screen absolute top-0 w-full' >
+                    className=' flex flex-col justify-end h-screen absolute top-0 w-full' >
                     <div className='h-[27%] p-6 bg-white relative'>
                         <h5
                             className='ini absolute opacity-0  right-6 top-6 text-2xl'>
@@ -198,7 +233,7 @@ const HomeMain = () => {
                                 className='bg-[#eee] px-12 py-2 text-lg rounded-lg w-full'
                                 type="text"
                                 placeholder='Add a pick-up location'
-                                onChange={(evt)=>{setPickup(evt.target.value);setride({...ride,pickup:evt.target.value});}}
+                                onChange={(evt) => { setPickup(evt.target.value); setride({ ...ride, pickup: evt.target.value }); }}
                                 value={pickup}
                             />
                             <input
@@ -208,13 +243,13 @@ const HomeMain = () => {
                                 }}
                                 className='bg-[#eee] px-12 py-2 text-lg rounded-lg w-full  mt-3'
                                 type="text"
-                                onChange={(evt)=>{setDestination(evt.target.value);setride({...ride,destination:evt.target.value})}}
+                                onChange={(evt) => { setDestination(evt.target.value); setride({ ...ride, destination: evt.target.value }) }}
                                 value={destination}
                                 placeholder='Enter your destination' />
                         </form>
                         <button
-                            onClick={()=>{
-                                if(pickup && destination){
+                            onClick={() => {
+                                if (pickup && destination) {
                                     setvehicalPanal(true)
                                 }
                             }}
@@ -224,28 +259,28 @@ const HomeMain = () => {
                     </div>
                     <div ref={pannelRef} className='bg-white h-0'>
                         <LocationPanel
-                        suggestions = {suggestions}
-                        setpickup={setPickup}
-                        setdestination={setDestination}
-                        active = {active}
+                            suggestions={suggestions}
+                            setpickup={setPickup}
+                            setdestination={setDestination}
+                            active={active}
                         />
                     </div>
                     <div ref={vehicalRef} className='absolute z-50 bg-zinc-100 w-full h-0'>
-                        <VehiclePanel 
-                        fares = {fares}
-                        setridePanal = {setridePanal}  
-                        setvehicalPanal={setvehicalPanal} />
+                        <VehiclePanel
+                            fares={fares}
+                            setridePanal={setridePanal}
+                            setvehicalPanal={setvehicalPanal} />
                     </div>
                     <div ref={conformRef} className='absolute z-50 bg-zinc-100 w-full h-0'>
                         <ConfirmRide
-                        setvehicalPanal = {setvehicalPanal}
-                        setridePanal = {setridePanal}
-                        setdriverPanal = {setdriverPanal}
+                            setvehicalPanal={setvehicalPanal}
+                            setridePanal={setridePanal}
+                            setdriverPanal={setdriverPanal}
                         />
-                        
+
                     </div>
                     <div ref={driverRef} className='absolute z-50 bg-zinc-100 w-full h-0'>
-                        <LookingForDriver setdriverPanal = {setdriverPanal}/>
+                        <LookingForDriver setdriverPanal={setdriverPanal} />
                     </div>
                 </div>
 

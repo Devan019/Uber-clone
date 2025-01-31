@@ -5,7 +5,6 @@ import { RideCon } from '../context/RideContext';
 const LocationPanel = ({suggestions , active ,setpickup , setdestination }) => {
     
     const {ride,setride} = useContext(RideCon);
-    console.log(ride)
     function setsuggestionOnActive(ele){
         if(active == "pickup"){
             setpickup(ele.target.innerText);

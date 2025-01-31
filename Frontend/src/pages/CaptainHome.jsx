@@ -7,6 +7,7 @@ import gsap from 'gsap'
 import ConformCaptainRide from '../components/ConformCaptainRide';
 import FinishRide from '../components/FinishRide';
 import { createCaptaionContext } from '../context/CaptainContext';
+import { MySocketContext } from '../context/SocketContext';
 import axios from 'axios';
 
 const CaptainHome = () => {
@@ -15,6 +16,7 @@ const CaptainHome = () => {
   const ConfromRideRef = useRef(false)
   const rideRef =  useRef(null)
   const {Captain , setCaptain} =  useContext(createCaptaionContext)
+  const {sendMessage} = useContext(MySocketContext)
   // console.log(Captain)
 
   async function main() {
@@ -32,10 +34,15 @@ const CaptainHome = () => {
       location : getCaptain.location
     })
     // console.log(Captain,getCaptain)
+    localStorage.setItem('capatin_id',getCaptain._id)
   }
 
   useEffect(() => {
-   main()
+    async function fetchData() {
+      await main()
+      sendMessage('join',{id:localStorage.getItem('capatin_id'), type:'captain'})
+    }
+    fetchData()
   }, [])
   
 
@@ -83,9 +90,9 @@ const CaptainHome = () => {
 
 
   useEffect(() => {
-    // setTimeout(() => {
-    //   setShowRideNotification(true);
-    // }, 1000);
+    setTimeout(() => {
+      setShowRideNotification(true);
+    }, 1000);
     
   } , [showRideNotification])
   

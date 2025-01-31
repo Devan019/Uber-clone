@@ -1,10 +1,13 @@
-import React, { useContext } from 'react'
+import React, { useContext,useEffect } from 'react'
 import {RideCon} from '../context/RideContext'
 import axios from 'axios'
-
+import { MySocketContext } from '../context/SocketContext'
+import { CreateUserContext } from '../context/UserContext'
 
 const ConfirmRide = ({setvehicalPanal,setridePanal,setdriverPanal}) => {
-    const {ride} = useContext(RideCon)
+    const {ride,setride} = useContext(RideCon)
+    const {sendMessage} = useContext(MySocketContext)
+    const {globalUser} = useContext(CreateUserContext)
     async function main(){
         const str = `${import.meta.env.VITE_URI}/ride/create`;
 
@@ -16,7 +19,11 @@ const ConfirmRide = ({setvehicalPanal,setridePanal,setdriverPanal}) => {
         });
         const data = await api.data;
 
-        console.log(data)
+        console.log(ride)
+
+        sendMessage('newRide',{ride:ride})
+
+        
 
     }
     // console.log("wow " , ride)

@@ -17,7 +17,7 @@ const UserLogin = () => {
     email: '',
     password: '',
   })
-  const {globalUser , setglobaluser} = useContext(CreateUserContext)
+
   // console.log(globalUser,setglobaluser)
   
   return (
