@@ -3,17 +3,6 @@ const client = mapbox({ accessToken: process.env.MAPBOX_API_TOKEN });
 const Captain = require('../models/captain.model');
 const mongoose = require('mongoose')
 
-const createLocationIndex = async () => {
-   try {
-       console.log("Creating index...");
-       // Use the actual collection name 'captainsTree' instead of default 'captains'
-       await mongoose.connection.collection('Captain').createIndex({ "location": "2dsphere" });
-       console.log("Index created successfully");
-   } catch (error) {
-       console.error("Error creating index:", error);
-       throw error;
-   }
-};
 
 module.exports.getCorrinates = async(addresh) => {
     
@@ -26,8 +15,8 @@ module.exports.getCorrinates = async(addresh) => {
 
    const coordinates = result.body.features[0].geometry.coordinates;
    const ans = {
-    ltd : coordinates[0],
-    lng : coordinates[1]
+    lng : coordinates[0],
+    ltd : coordinates[1]
    }
 
    return ans;
@@ -63,18 +52,17 @@ module.exports.getAllPlaces = async(addresh) => {
      return result;
 }
 
-module.exports.getNearCaptains = async({ltd,lng}) => {  
+module.exports.getNearCaptains = async({lng,ltd}) => {  
 
    console.log("in nera ", ltd,lng)
 
-   // await createLocationIndex();
 
       const captains = await Captain.find({
          location : {
                $near : {
                   $geometry : {
                      type : "Point",
-                     coordinates : [Number(ltd),Number(lng)]
+                     coordinates : [Number(lng),Number(ltd)]
                   },
                   $maxDistance : 10000
                }

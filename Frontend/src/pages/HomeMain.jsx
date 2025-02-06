@@ -82,43 +82,47 @@ const HomeMain = () => {
 
 
     useEffect(() => {
-        async function main() {
-            const api = await axios.post(`${import.meta.env.VITE_URI}/map/getsuggestion`, {
-                addresh: pickup
-            }, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                },
-            })
-
-            const data = api.data;
-
-            if (!data.mess) {
-                setsuggestions(Array(data.allSuggestions)[0])
-
+        if(pickup){
+            async function main() {
+                const api = await axios.post(`${import.meta.env.VITE_URI}/map/getsuggestion`, {
+                    addresh: pickup
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    },
+                })
+    
+                const data = api.data;
+    
+                if (!data.mess) {
+                    setsuggestions(Array(data.allSuggestions)[0])
+    
+                }
             }
+            main()
         }
-        main()
     }, [pickup])
 
     useEffect(() => {
-        async function main() {
-            const api = await axios.post(`${import.meta.env.VITE_URI}/map/getsuggestion`, {
-                addresh: destination
-            }, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                },
-            })
-
-
-            const data = api.data;
-
-            if (!data.mess) {
-                setsuggestions(Array(data.allSuggestions)[0])
+        if(destination){
+            async function main() {
+                const api = await axios.post(`${import.meta.env.VITE_URI}/map/getsuggestion`, {
+                    addresh: destination
+                }, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    },
+                })
+    
+    
+                const data = api.data;
+    
+                if (!data.mess) {
+                    setsuggestions(Array(data.allSuggestions)[0])
+                }
             }
+            main()
         }
-        main()
     }, [destination])
 
     useEffect(() => {

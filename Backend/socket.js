@@ -42,8 +42,8 @@ module.exports.socketInit = (server) => {
         const captain = await Captain.findById(id)
         captain.location = {
           type: 'Point',
-          coordinates: [location.lang, location.ltd]
-      }
+          coordinates: [location.lng, location.ltd]
+        }
        
         await captain.save()
         

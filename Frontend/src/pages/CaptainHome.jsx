@@ -42,11 +42,11 @@ const CaptainHome = () => {
       navigator.geolocation.getCurrentPosition((position) => {
         const {latitude,longitude} = position.coords
         const ltd = latitude
-        const lang = longitude
+        const lng = longitude
 
         sendMessage('update-captain-location',{
           id : localStorage.getItem('capatin_id'),
-          location : {ltd,lang}
+          location : {ltd,lng}
         })
       }
       )
