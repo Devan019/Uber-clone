@@ -4,7 +4,7 @@ const blacklistModel = require('../models/blacklist.model')
 const captainModel = require('../models/captain.model');
 
 module.exports.auth = async (req, res, next) => {
-  console.log(req.headers.authorization)
+  // console.log(req.headers.authorization)
   const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
 
   if (!token) {
@@ -19,7 +19,7 @@ module.exports.auth = async (req, res, next) => {
 
   try {
     const decode = jwt.verify(token, process.env.TOKEN_SECRET);
-    console.log(decode)
+    // console.log(decode)
 
     if (!decode.id) {
       return res.status(401).json("user is invaild");
@@ -72,6 +72,6 @@ module.exports.authCaptain = async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 }

@@ -1,12 +1,12 @@
 import React, { useContext } from 'react'
 import { RideCon } from '../context/RideContext'
 
-const VehiclePanel = ({ className, setvehicalPanal, setridePanal, fares }) => {
+const VehiclePanel = ({ className, setvehicalPanal, setridePanal, fares, setFindtripBtn }) => {
     const { ride, setride } = useContext(RideCon)
     return (
         <div className={`${className}`}>
             <h5
-                onClick={() => { setvehicalPanal(false) }}
+                onClick={() => { setFindtripBtn(false) ;setvehicalPanal(false) }}
                 className='p-1 text-center right-0 absolute top-4'><i className="text-3xl text-zinc-900 ri-arrow-down-wide-line"></i></h5>
             <h3 className='text-2xl font-semibold mb-5'>Choose a Vehicle</h3>
             <div onClick={() => {

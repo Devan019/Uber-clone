@@ -5,8 +5,8 @@ const route = require('express').Router();
 
 
 
-route.get("/getcors",
-    query('addresh').isString().isLength({min:6})
+route.post("/getNearCaptains" ,
+    query('pickup').isString().isLength({min:6})
     , auth , sendCoordinates)
 
 route.get("/getdis" , 

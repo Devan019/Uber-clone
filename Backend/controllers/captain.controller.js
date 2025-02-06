@@ -57,7 +57,7 @@ module.exports.loginCaptain = async (req, res) => {
             CheckCaptain
         })
     } catch (error) {
-        console.log(error);
+        // console.log(error);
     }
 }
 
@@ -82,7 +82,7 @@ module.exports.logout = async(req,res) => {
         res.clearCookie('token');
         return res.json("logout successfully");
     } catch (error) {
-        console.log(error);
+        // console.log(error);
     }
 }
 

@@ -37,10 +37,29 @@ const CaptainHome = () => {
     localStorage.setItem('capatin_id',getCaptain._id)
   }
 
+  function sendLocation(){
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition((position) => {
+        const {latitude,longitude} = position.coords
+        const ltd = latitude
+        const lang = longitude
+
+        sendMessage('update-captain-location',{
+          id : localStorage.getItem('capatin_id'),
+          location : {ltd,lang}
+        })
+      }
+      )
+    }
+  }
+
   useEffect(() => {
     async function fetchData() {
       await main()
       sendMessage('join',{id:localStorage.getItem('capatin_id'), type:'captain'})
+      setInterval(() => {
+        sendLocation()
+      }, 1000);
     }
     fetchData()
   }, [])
@@ -90,9 +109,9 @@ const CaptainHome = () => {
 
 
   useEffect(() => {
-    setTimeout(() => {
-      setShowRideNotification(true);
-    }, 1000);
+    // setTimeout(() => {
+    //   setShowRideNotification(true);
+    // }, 1000);
     
   } , [showRideNotification])
   

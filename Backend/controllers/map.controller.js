@@ -3,6 +3,7 @@ const directionsService = require('@mapbox/mapbox-sdk/services/directions');
 
 const mapboxClient = mapbox({ accessToken: process.env.MAPBOX_API_TOKEN });
 const directionsClient = directionsService(mapboxClient);
+const {getNearCaptains} = require('../services/map.service')
 // const autoComplation  = 
 
 
@@ -11,16 +12,20 @@ const { validationResult } = require("express-validator");
 
 module.exports.sendCoordinates = async (req,res) => {
     try {
-        const {addresh} = req.body;
-        const err =  validationResult(req);
-        if(!err.isEmpty()){
-            return res.json({err:err.array()})
-        }
+        console.log("ahi avi gayu", req.body)
+        const {pickup} = req.body;
+        // const err =  validationResult(req);
+        // if(!err.isEmpty()){
+        //     return res.json({err:err.array()})
+        // }
 
 
-        const coors = await getCorrinates({addresh})
-        // console.log(coors , addresh)
-        return res.json(coors)
+        const coors = await getCorrinates(pickup)
+        console.log(coors , pickup)
+
+        const allCaptains = await getNearCaptains(coors)    
+
+        return res.json(allCaptains)
     } catch (error) {
         return res.json(error);
     }
@@ -37,7 +42,7 @@ module.exports.getDistaceAndTime = async({pickup, destination}) => {
     }
 
     try {
-        console.log( "paras  : " , pickup , destination)
+        // console.log( "paras  : " , pickup , destination)
         const coodA = await getCorsArray(pickup);
     const coodB = await getCorsArray(destination);
 
@@ -66,7 +71,7 @@ module.exports.getDistaceAndTime = async({pickup, destination}) => {
                 duration: duration,
             }
     } catch (error) {
-        console.log(error.message)
+        // console.log(error.message)
     
     }
 

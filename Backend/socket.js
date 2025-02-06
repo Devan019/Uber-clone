@@ -14,7 +14,7 @@ module.exports.socketInit = (server) => {
   })
 
   io.on('connection', (socket) => {
-    console.log(`connection successfully : ${socket.id}`)
+    // console.log(`connection successfully : ${socket.id}`)
 
     try {
       socket.on('join', async (data) => {
@@ -31,10 +31,24 @@ module.exports.socketInit = (server) => {
             user.socketId = socket.id
             await user.save()
           }
-        } catch (error) {
+        } catch (error) {}
 
-        }
+
       })
+
+      socket.on('update-captain-location', async (data) => {
+        // console.log(data)
+        const { id, location } = data
+        const captain = await Captain.findById(id)
+        captain.location = {
+          type: 'Point',
+          coordinates: [location.lang, location.ltd]
+      }
+       
+        await captain.save()
+        
+      })
+
     } catch (error) {
       console.log(error)
     }

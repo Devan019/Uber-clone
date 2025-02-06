@@ -33,6 +33,9 @@ const HomeMain = () => {
     const [fares, setfares] = useState({})
     const { ride, setride } = useContext(RideCon);
 
+    const [nearCaptains, setnearCaptains] = useState([])
+    const [findtripBtn, setfindtripBtn] = useState(false)
+
     async function main() {
         const api = await axios.get(`${import.meta.env.VITE_URI}/user/profile`, {
             headers: {
@@ -51,6 +54,19 @@ const HomeMain = () => {
         })
 
         localStorage.setItem('id', data._id)
+    }
+
+    async function getCaptains() {
+        const api = await axios.post(`${import.meta.env.VITE_URI}/map/getNearCaptains`, {
+            pickup, destination
+        }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+
+        const data = api.data;
+        console.log(data)
     }
 
     useEffect(() => {
@@ -192,6 +208,15 @@ const HomeMain = () => {
         }
     }, [DriverPanal])
 
+
+
+    useEffect(() => {
+        
+        if (findtripBtn) {
+            getCaptains()
+        }
+    }, [findtripBtn])
+
     return (
         <div>
 
@@ -252,6 +277,8 @@ const HomeMain = () => {
                                 if (pickup && destination) {
                                     setvehicalPanal(true)
                                 }
+                                setfindtripBtn(true)
+                                console.log("op-1")
                             }}
                             className='bg-black text-white px-4 py-2 rounded-lg mt-3 w-full'>
                             Find Trip
@@ -265,8 +292,14 @@ const HomeMain = () => {
                             active={active}
                         />
                     </div>
-                    <div ref={vehicalRef} className='absolute z-50 bg-zinc-100 w-full h-0'>
+                    <div 
+                    onClick={() => {
+                        setfindtripBtn(false)
+                        console.log("op-2")
+                    }}
+                    ref={vehicalRef} className='absolute z-50 bg-zinc-100 w-full h-0'>
                         <VehiclePanel
+                            setfindtripBtn = {setfindtripBtn}
                             fares={fares}
                             setridePanal={setridePanal}
                             setvehicalPanal={setvehicalPanal} />

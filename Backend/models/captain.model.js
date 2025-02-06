@@ -52,13 +52,18 @@ const captainSchema = new mongoose.Schema({
             enum: ['auto', 'car', 'motorcycle']
         }
     },
-    location : {
-        ltd : {
-            type : Number
+    location: {
+        type: {
+          type: String,
+          enum: ['Point'],
+          required: true,
+          index: '2dsphere'
         },
-        lang : {
-            type : Number
-        }
+        coordinates: {
+          type: [Number],
+          required: true
+        },
+        
     },
     status:{
         type : String,
@@ -67,6 +72,8 @@ const captainSchema = new mongoose.Schema({
     }
 
 })
+
+captainSchema.index({ location: "2dsphere" });
 
 captainSchema.statics.getHash = async function(password){
     return await bcrypt.hash(password , 10)

@@ -34,10 +34,10 @@ module.exports.getFare = async(pickup, destination, vehicleType) => {
         return "not possible"
     }
 
-    console.log( "rate : " , rate)
+    // console.log( "rate : " , rate)
 
     const totalFare = rate.baseFare + rate.perKmRate * distance
-    console.log("tfare : " , totalFare)
+    // console.log("tfare : " , totalFare)
 
 
     if (!totalFare) {
