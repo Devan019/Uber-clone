@@ -4,7 +4,6 @@ const blacklistModel = require('../models/blacklist.model')
 const captainModel = require('../models/captain.model');
 
 module.exports.auth = async (req, res, next) => {
-  // console.log(req.headers.authorization)
   const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
 
   if (!token) {
@@ -14,12 +13,11 @@ module.exports.auth = async (req, res, next) => {
   const blacklist = await blacklistModel.findOne({ token });
 
   if (blacklist) {
-    return res.status(402).json('unauthoried');
+    return res.status(400).json('unauthoried');
   }
 
   try {
     const decode = jwt.verify(token, process.env.TOKEN_SECRET);
-    // console.log(decode)
 
     if (!decode.id) {
       return res.status(401).json("user is invaild");
@@ -27,7 +25,7 @@ module.exports.auth = async (req, res, next) => {
 
     const User = await user.findById(decode.id);
     if (!User) {
-      return res.status(402).json("User is not found");
+      return res.status(400).json("User is not found");
     }
 
     req.user = User

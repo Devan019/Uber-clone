@@ -49,19 +49,17 @@ const captainSchema = new mongoose.Schema({
         type: {
             type: String,
             required : true,
-            enum: ['auto', 'car', 'motorcycle']
+            enum: ['auto', 'car', 'moto']
         }
     },
     location: {
         type: {
           type: String,
           enum: ['Point'],
-          required: true,
           index: '2dsphere'
         },
         coordinates: {
           type: [Number],
-          required: true
         },
         
     },
@@ -77,7 +75,6 @@ captainSchema.index({ location: "2dsphere" });
 
 captainSchema.statics.getHash = async function(password){
     return await bcrypt.hash(password , 10)
-
 }
 
 captainSchema.methods.comparePassword = async function(password) {

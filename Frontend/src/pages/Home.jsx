@@ -2,35 +2,37 @@ import React, { useContext, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { CreateUserContext } from '../context/UserContext'
 import Toast from 'light-toast'
+import axios from 'axios'
 
 const Home = () => {
-  const {user} = useContext(CreateUserContext)
+  const { user } = useContext(CreateUserContext)
   const navigate = useNavigate();
-  const location =  useLocation();
+  const location = useLocation();
   const data = location.state;
-  console.log(navigate)
 
   useEffect(() => {
-    if(localStorage.getItem("login")){
-      Toast.success("welcome to UBER!",500)
+    if (localStorage.getItem("login")) {
+      Toast.success("welcome to UBER!", 500)
       localStorage.removeItem("login");
-      
-    }else if(localStorage.getItem("captainLogin")){
-      Toast.success("welcome to UBER!",500)
+
+    } else if (localStorage.getItem("captainLogin")) {
+      Toast.success("welcome to UBER!", 500)
       localStorage.removeItem("captainLogin");
-      
+
     }
   })
 
-  useEffect(()=>{
-    if(localStorage.getItem("navigateUserLogin") && !data){
+  useEffect(() => {
+    if (localStorage.getItem("navigateUserLogin") && !data) {
       navigate("/captain-home")
     }
 
-    if(localStorage.getItem("navigateUserLogin") && !data){
+    if (localStorage.getItem("navigateUserLogin") && !data) {
       navigate("/home")
     }
-  })
+  }, [])
+
+
 
   return (
     <div className='flex flex-col justify-between h-screen relative'>

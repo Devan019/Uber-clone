@@ -8,7 +8,27 @@ import Auth from './components/auth'
 import HomeMain from './pages/HomeMain'
 import CaptainHome from './pages/CaptainHome'
 import CaptainRiding from './pages/CaptainRiding'
+import { useEffect } from 'react'
 function App() {
+
+  const loadGoogleMapsScript = () => {
+    if (window.google) return; 
+    const script = document.createElement("script");
+    script.src =
+      `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_API_KEY}&libraries=places&callback=initMap`;
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+  };
+
+  useEffect(() => {
+    window.initMap = () => {
+      console.log("Google Maps Loaded");
+    };
+
+    loadGoogleMapsScript();
+  }, []);
+
 
   return (
     <>
@@ -26,7 +46,7 @@ function App() {
         <Route path='/captain-signup' element={<CaptainSignup />} />
         <Route path='/captain-login' element={<CaptainLogin />} />
         <Route path='/captain-home' element={<CaptainHome />} />
-        <Route path='/captain-ride' element={< CaptainRiding/>} />
+        <Route path='/captain-ride' element={< CaptainRiding />} />
       </Routes>
     </>
   )

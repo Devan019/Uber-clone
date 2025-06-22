@@ -1,32 +1,31 @@
 import React, { useContext,useEffect } from 'react'
 import {RideCon} from '../context/RideContext'
 import axios from 'axios'
-import { MySocketContext } from '../context/SocketContext'
-import { CreateUserContext } from '../context/UserContext'
 
-const ConfirmRide = ({setvehicalPanal,setridePanal,setdriverPanal}) => {
+
+const ConfirmRide = ({setvehicalPanal,setridePanal,setdriverPanal, setlookingForDriverPanal, rideRef}) => {
     const {ride,setride} = useContext(RideCon)
-    const {sendMessage} = useContext(MySocketContext)
-    const {globalUser} = useContext(CreateUserContext)
+   
     async function main(){
         const str = `${import.meta.env.VITE_URI}/ride/create`;
-
         
-        const api = await axios.post(str,ride,{
+        const newRide = await axios.post(str,ride,{
             headers:{
                 Authorization : `Bearer ${localStorage.getItem('token')}`
             }
         });
-        const data = await api.data;
 
-        console.log(ride)
+        const sendRide = {
+            ...ride,
+            ...newRide.data.ride,
+        }
+        console.log('sendRide', sendRide);
 
-        sendMessage('newRide',{ride:ride})
+        setride(sendRide);
+        rideRef.current = sendRide;
 
-        
-
+        // sendMessage('newRide',{ride:sendRide})
     }
-    // console.log("wow " , ride)
     return (
         <div>
             <h5 
@@ -65,6 +64,7 @@ const ConfirmRide = ({setvehicalPanal,setridePanal,setdriverPanal}) => {
                     setvehicalPanal(false);
                     setridePanal(false)
                     main()
+                    setlookingForDriverPanal(true);
                 }
                     
                 }

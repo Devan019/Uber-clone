@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
@@ -6,15 +5,13 @@ import { BrowserRouter } from 'react-router-dom'
 import UserContext from './context/UserContext.jsx'
 import 'remixicon/fonts/remixicon.css';
 import RideContext from './context/RideContext.jsx'
-import CaptainContext from './context/CaptainContext.jsx'
 import SocketContext from './context/SocketContext.jsx'
-
-
+import CaptainContextProvider from './context/CaptainContext.jsx'
 
 
 createRoot(document.getElementById('root')).render(
   <SocketContext>
-    <CaptainContext>
+    <CaptainContextProvider>
       <RideContext>
         <UserContext>
           <BrowserRouter>
@@ -22,6 +19,6 @@ createRoot(document.getElementById('root')).render(
           </BrowserRouter>
         </UserContext>
       </RideContext>
-    </CaptainContext>
+    </CaptainContextProvider>
   </SocketContext>
 )

@@ -5,7 +5,6 @@ const Captain = require('./models/captain.model');
 let io;
 
 module.exports.socketInit = (server) => {
-  // console.dir(server)
   io = new Server(server, {
     cors: {
       origin: "*",
@@ -14,12 +13,10 @@ module.exports.socketInit = (server) => {
   })
 
   io.on('connection', (socket) => {
-    // console.log(`connection successfully : ${socket.id}`)
 
     try {
       socket.on('join', async (data) => {
         const { id, type } = data;
-        console.log(data, " in")
 
         try {
           if (type === 'captain') {
@@ -37,7 +34,6 @@ module.exports.socketInit = (server) => {
       })
 
       socket.on('update-captain-location', async (data) => {
-        // console.log(data)
         const { id, location } = data
         const captain = await Captain.findById(id)
         captain.location = {
@@ -47,6 +43,12 @@ module.exports.socketInit = (server) => {
        
         await captain.save()
         
+      })
+
+      //send ride request to captain or  user
+      socket.on('sendForRide', ({ name, ride, userSocketId, IAmSocketId }) => {
+        console.log('sendForRide', name, ride, userSocketId, IAmSocketId)
+        io.to(userSocketId).emit('reciveRideRequest', {name, ride, IAmSocketId})
       })
 
     } catch (error) {

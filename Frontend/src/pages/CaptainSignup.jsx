@@ -1,9 +1,12 @@
-import React, { useContext, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import CaptainContext from '../context/CaptainContext' 
+import { CaptainContext } from '../context/CaptainContext'
+
+
 const CaptainSignup = () => {
   const {Captain, setCaptain} = useContext(CaptainContext)
+  const navigate =  useNavigate()
   return (
     <div className='py-5 px-5 h-screen flex flex-col justify-between'>
       <div>
@@ -14,8 +17,7 @@ const CaptainSignup = () => {
           e.preventDefault();
           const api = await axios.post(`${import.meta.env.VITE_URI}/captain/register`, Captain);
           const data = await api.data;
-          console.log(data);
-          if (data.Token) {
+          if (data.Captain) {
             localStorage.setItem("captainSignup", true);
             navigate("/captain-login");
           }
@@ -83,18 +85,18 @@ const CaptainSignup = () => {
             }}
           />
 
-          <h3 className='text-lg font-medium mb-2'>Vehicle Information</h3>
+          <h3 className='text-lg font-medium mb-2'>vehicle Information</h3>
           <div className='flex gap-4 mb-7'>
             <input
               required
               className='bg-[#eeeeee] w-1/2 rounded-lg px-4 py-2 border text-lg placeholder:text-base'
               type="text"
-              placeholder='Vehicle Color'
-              value={Captain.Vehicle.color}
+              placeholder='vehicle Color'
+              value={Captain.vehicle.color}
               onChange={(evt) => {
                 setCaptain({
-                  ...Captain, Vehicle: {
-                    ...Captain.Vehicle,
+                  ...Captain, vehicle: {
+                    ...Captain.vehicle,
                     color: evt.target.value
                   }
                 })
@@ -104,12 +106,12 @@ const CaptainSignup = () => {
               required
               className='bg-[#eeeeee] w-1/2 rounded-lg px-4 py-2 border text-lg placeholder:text-base'
               type="text"
-              placeholder='Vehicle Plate'
-              value={Captain.Vehicle.plate}
+              placeholder='vehicle Plate'
+              value={Captain.vehicle.plate}
               onChange={(evt) => {
                 setCaptain({
-                  ...Captain, Vehicle: {
-                    ...Captain.Vehicle,
+                  ...Captain, vehicle: {
+                    ...Captain.vehicle,
                     plate: evt.target.value
                   }
                 })
@@ -121,12 +123,12 @@ const CaptainSignup = () => {
               required
               className='bg-[#eeeeee] w-1/2 rounded-lg px-4 py-2 border text-lg placeholder:text-base'
               type="number"
-              placeholder='Vehicle Capacity'
-              value={Captain.Vehicle.capacity}
+              placeholder='vehicle Capacity'
+              value={Captain.vehicle.capacity}
               onChange={(evt) => {
                 setCaptain({
-                  ...Captain, Vehicle: {
-                    ...Captain.Vehicle,
+                  ...Captain, vehicle: {
+                    ...Captain.vehicle,
                     capacity: evt.target.value
                   }
                 })
@@ -135,20 +137,20 @@ const CaptainSignup = () => {
             <select
               required
               className='bg-[#eeeeee] w-1/2 rounded-lg px-4 py-2 border text-lg placeholder:text-base'
-              value={Captain.Vehicle.type}
+              value={Captain.vehicle.type}
               onChange={(evt) => {
                 setCaptain({
-                  ...Captain, Vehicle: {
-                    ...Captain.Vehicle,
+                  ...Captain, vehicle: {
+                    ...Captain.vehicle,
                     type: evt.target.value
                   }
                 })
               }}
             >
-              <option value="" disabled>Select Vehicle Type</option>
-              <option value="car">Car</option>
-              <option value="auto">Auto</option>
-              <option value="moto">Moto</option>
+              <option value="" disabled>Select vehicle Type</option>
+              <option value="car">car</option>
+              <option value="auto">auto</option>
+              <option value="moto">moto</option>
             </select>
           </div>
 

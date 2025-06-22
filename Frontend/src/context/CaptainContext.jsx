@@ -1,10 +1,10 @@
 import React, { createContext, useState } from 'react'
 
 
-export const createCaptaionContext = createContext();
+export const CaptainContext = createContext();
 
 
-const CaptainContext = ({children}) => {
+const CaptainContextProvider = ({children}) => {
 
   const [Captain, setCaptain] = useState({
     email : '',
@@ -19,19 +19,15 @@ const CaptainContext = ({children}) => {
       capacity : '',
       type : ''
     },
-    location : {
-      lat : '',
-      long : ''
-    },
-    status : ''
+    status : 'inactive'
 
   })
 
   return (
-    <createCaptaionContext.Provider value={{Captain, setCaptain}}>
+    <CaptainContext.Provider value={{Captain, setCaptain}}>
       {children}
-    </createCaptaionContext.Provider>
+    </CaptainContext.Provider>
   )
 }
 
-export default CaptainContext
+export default CaptainContextProvider

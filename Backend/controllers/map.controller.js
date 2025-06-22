@@ -1,19 +1,10 @@
-const mapbox = require('@mapbox/mapbox-sdk');
-const directionsService = require('@mapbox/mapbox-sdk/services/directions');
-
-const mapboxClient = mapbox({ accessToken: process.env.MAPBOX_API_TOKEN });
-const directionsClient = directionsService(mapboxClient);
-const {getNearCaptains} = require('../services/map.service')
-// const autoComplation  = 
-
-
-const { getCorrinates, getCorsArray , getAllPlaces } = require("../services/map.service");
+const { getNearCaptains, convertCordinatesToAddress, getCorsArray, getCorrinates } = require('../services/map.service')
 const { validationResult } = require("express-validator");
+const axios = require('axios');
 
-module.exports.sendCoordinates = async (req,res) => {
+module.exports.getNearCaptainsByPickup = async (req, res) => {
     try {
-        console.log("ahi avi gayu", req.body)
-        const {pickup} = req.body;
+        const { pickup, vechicleType } = req.body;
         // const err =  validationResult(req);
         // if(!err.isEmpty()){
         //     return res.json({err:err.array()})
@@ -21,9 +12,8 @@ module.exports.sendCoordinates = async (req,res) => {
 
 
         const coors = await getCorrinates(pickup)
-        console.log(coors , pickup)
 
-        const allCaptains = await getNearCaptains(coors)    
+        const allCaptains = await getNearCaptains(coors, vechicleType)
 
         return res.json(allCaptains)
     } catch (error) {
@@ -31,68 +21,98 @@ module.exports.sendCoordinates = async (req,res) => {
     }
 }
 
-module.exports.getDistaceAndTime = async({pickup, destination}) => {
+module.exports.getDistaceAndTime = async ({ pickup, destination }) => {
 
     const req = {
-        pickup,destination
+        pickup, destination
     }
-    const err =  validationResult(req);
+    const err = validationResult(req);
+    if (!err.isEmpty()) {
+        return res.json({ err: err.array() })
+    }
+
+    try {
+        const coodA = await getCorsArray(pickup);
+        const coodB = await getCorsArray(destination);
+
+        const apiKey = process.env.GOOGLE_API_KEY;
+
+        const response = await axios.get('https://maps.googleapis.com/maps/api/directions/json', {
+            params: {
+                origin: `${coodA[1]},${coodA[0]}`,
+                destination: `${coodB[1]},${coodB[0]}`,
+                mode: 'driving', // Options: 'driving', 'walking', 'bicycling', 'transit'
+                key: apiKey
+            }
+        });
+
+
+        const route = response.data.routes[0];
+        const duration = route.legs[0].duration.value; // in seconds
+        const distance = route.legs[0].distance.value; // in meters
+
+        return {
+            distance: distance,
+            duration: duration,
+        };
+    } catch (error) {
+        return {
+            error: "Error fetching distance and duration",
+        };
+       
+    }
+}
+
+module.exports.getLocation = async (req, res) => {
+    const { lat, long } = req.body;
+    if (!lat || !long) {
+        return res.json({
+            mess: "not vaild"
+        })
+    }
+
+    const place = await convertCordinatesToAddress(lat, long)
+    return res.json({
+        place: place
+    })
+}
+
+module.exports.findDistanceBtnTwoPoints = async (req, res) => {
+    const err = validationResult(req);
+    if (!err.isEmpty()) {
+        return res.json({ err: err.array() })
+    }
+    const { lat1, lon1, lat2, lon2 } = req.body;
+    const toRad = (value) => (value * Math.PI) / 180;
+
+    const R = 6371; // Radius of the Earth in km
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRad(lat1)) *
+        Math.cos(toRad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+
+    return res.json({
+        distance : distance
+    })
+}
+
+module.exports.getCorrinatesByAddress = async ( req,res) => {
+    const {address} = req.body;
+    const err = validationResult(req);
     if(!err.isEmpty()){
         return res.json({err:err.array()})
     }
 
-    try {
-        // console.log( "paras  : " , pickup , destination)
-        const coodA = await getCorsArray(pickup);
-    const coodB = await getCorsArray(destination);
-
-    const response = await directionsClient
-            .getDirections({
-                profile: 'driving', // Options: 'driving', 'walking', 'cycling'
-                waypoints: [
-                    { coordinates: coodA },
-                    { coordinates: coodB },
-                ],
-            })
-            .send();
-
-    const duration =  response.body.routes[0].duration
-    const distance = response.body.routes[0].distance
-
-    const distanceInKm = Math.floor(distance / 1000);
-    const remainingMeters = Math.round(distance % 1000);
-    // Convert duration to hours and minutes
-        const days = Math.floor(duration / (3600 * 24));
-            const hours = Math.floor((duration % (3600 * 24)) / 3600);
-            const minutes = Math.round((duration % 3600) / 60);
-
-            return obj = {
-                distance: distance,
-                duration: duration,
-            }
-    } catch (error) {
-        // console.log(error.message)
-    
-    }
-
-}
-
-module.exports.getSuggestion = async(req,res) => {
-    const {addresh} = req.body;
-    if(addresh == ""){
-        return res.json({
-            mess : "not vaild"
-        })
-    }
-
-    const AllPlaces = await getAllPlaces(addresh)
-    const all = AllPlaces.body.features
-
-
-    return  res.json({
-        allSuggestions : all.map((feature) => ({
-            place_name: feature.place_name,
-            // coordinates: feature.geometry.coordinates,
-        }))
+    const corrinates = await getCorrinates(address)
+    return res.json({
+        corrinates : corrinates
     })
 }

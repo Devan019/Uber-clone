@@ -1,7 +1,6 @@
-import React, {  useContext, useEffect, useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import { Link , useNavigate} from 'react-router-dom'
 import axios from 'axios'
-import { CreateUserContext } from '../context/UserContext'
 import Toast from 'light-toast';
 
 const UserLogin = () => {
@@ -18,7 +17,6 @@ const UserLogin = () => {
     password: '',
   })
 
-  // console.log(globalUser,setglobaluser)
   
   return (
     <div className='p-7 h-screen flex flex-col justify-between'>
@@ -30,7 +28,6 @@ const UserLogin = () => {
             Toast.loading("login process...")
             const api = await axios.post(`${import.meta.env.VITE_URI}/user/login` , user);
             const data = await api.data;
-            console.log(data)
             if(data.token){
               localStorage.setItem("token" , data.token);
               localStorage.setItem("login" , true);

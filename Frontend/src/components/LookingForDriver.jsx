@@ -1,9 +1,10 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { RideCon } from '../context/RideContext'
 
 
 const LookingForDriver = ({setdriverPanal}) => {
     const {ride,setride} = useContext(RideCon);
+
     return (
         <div>
             <h5 
@@ -17,14 +18,14 @@ const LookingForDriver = ({setdriverPanal}) => {
                     <div className='flex items-center gap-5 p-3 border-b-2'>
                         <i className="ri-map-pin-user-fill"></i>
                         <div>
-                            <h3 className='text-lg font-medium'>562/11-A</h3>
+                            {/* <h3 className='text-lg font-medium'>562/11-A</h3> */}
                             <p className='text-sm -mt-1 text-gray-600'>{ride.pickup}</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-5 p-3 border-b-2'>
                         <i className="text-lg ri-map-pin-2-fill"></i>
                         <div>
-                            <h3 className='text-lg font-medium'>562/11-A</h3>
+                            {/* <h3 className='text-lg font-medium'>562/11-A</h3> */}
                             <p className='text-sm -mt-1 text-gray-600'>{ride.destination}</p>
                         </div>
                     </div>

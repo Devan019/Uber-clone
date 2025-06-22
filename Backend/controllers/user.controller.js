@@ -4,10 +4,8 @@ const { createUser } = require('../services/user.service');
 const blacklistModel = require('../models/blacklist.model')
 
 module.exports.registerUser = async (req, res) => {
-    // console.log(req.body)
     const errs = validationResult(req);
     if (!errs.isEmpty()) {
-        // console.log("in error parts")
         return res.json({ errrors: errs.array() });
     }
     try {

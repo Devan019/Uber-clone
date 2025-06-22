@@ -23,7 +23,6 @@ const UserSignup = () => {
             Toast.loading("signup process...")
             const api = await axios.post(`${import.meta.env.VITE_URI}/user/register` , user);
             const data = await api.data;
-            console.log(data)
             if(data.Token){
               localStorage.setItem("signup" , true)
               navigate("/login");

@@ -6,8 +6,8 @@ const blacklistModel = require('../models/blacklist.model')
 module.exports.registerCaptain = async (req, res) => {
     try {
         const errs = validationResult(req);
-        if (!errs.isEmpty()) {
-            return res.status(402).json(errs);
+        if (errs.errors.length !== 0) {
+            return res.json(errs);
         }
 
         const Captain = await createCaptain(req.body, res);
@@ -67,6 +67,25 @@ module.exports.profile = async (req, res) => {
     }catch (error) {
         return res.status(500).json({ error: "Internal server error" });
     }
+}
+
+module.exports.setActive = async (req,res) => {
+    const captainId = req.captain._id;
+    const { status } = req.body;
+    const captain = await captainModel.findById(captainId);
+    if (!captain) {
+        return res.status(404).json({ message: "Captain not found" });
+    }
+
+    if (status !== "active" && status !== "inactive") {
+        return res.status(400).json({ message: "Invalid status" });
+    }
+
+    captain.status = status;
+
+    await captain.save();
+
+    return res.status(200).json({ message: "Status updated successfully" });
 }
 
 module.exports.logout = async(req,res) => {

@@ -1,7 +1,9 @@
 import React from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const ConformCaptainRide = ({ setShowRideNotification , setShowConformRide}) => {
+const ConformCaptainRide = ({ setShowRideNotification , setShowConformRide, ride}) => {
+    const [otp, setOtp] = useState(0)
     const navigate = useNavigate()
     return (
         <div>
@@ -48,17 +50,29 @@ const ConformCaptainRide = ({ setShowRideNotification , setShowConformRide}) => 
                         setShowConformRide(false)
                         setShowRideNotification(false)
                     }}>
-                        <input required 
+                        <input required
                         min = {100000}
+                        max = {999999}
+                        value={otp}
+                        onChange={(e)=>{setOtp(e.target.value)}}
+                        autoFocus
                         type="number" className='bg-[#eee] px-6 py-4 font-mono text-lg rounded-lg w-full mt-3' placeholder='Enter OTP' />
 
                         <button
-                        // onClick={()=>{
-                        
-                        // }}
+                        onClick={()=>{
+                            if(ride.otp === otp) {
+                                setShowConformRide(false)
+                                setShowRideNotification(false)
+                            }
+                        }}
                         type='submit' className='w-full mt-5 text-lg flex justify-center bg-green-600 text-white font-semibold p-3 rounded-lg'>Confirm</button>
-                        
-                        <button 
+
+                        <button
+                        onClick={()=>{
+                            // setIsConformRide(false)
+                            setShowConformRide(false)
+                            setShowRideNotification(false)
+                        }}
                         className='w-full mt-2 bg-red-600 text-lg text-white font-semibold p-3 rounded-lg'>Cancel</button>
 
                     </form>

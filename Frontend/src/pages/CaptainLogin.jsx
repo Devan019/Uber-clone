@@ -2,7 +2,7 @@ import React, { useState , useEffect, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Toast from 'light-toast'
 import axios from 'axios'
-import { createCaptaionContext } from '../context/CaptainContext'
+import { CaptainContext } from '../context/CaptainContext'
 
 const CaptainLogin = () => {
   const navigate = useNavigate()
@@ -12,7 +12,7 @@ const CaptainLogin = () => {
       localStorage.removeItem("signup")
     }
   })
-  const {Captain, setCaptain} = useContext(createCaptaionContext)
+  const {Captain, setCaptain} = useContext(CaptainContext)
   
   return (
 
@@ -25,13 +25,11 @@ const CaptainLogin = () => {
           Toast.loading("login process...")
           const api = await axios.post(`${import.meta.env.VITE_URI}/captain/login`, Captain);
           const data = await api.data;
-          // console.log(data);
 
           if (data.token) {
             localStorage.setItem("token" , data.token);
             localStorage.setItem("captainlogin" , true);
             localStorage.setItem("navigateCaptainLogin" , true);
-            console.log("in")
             Toast.hide();
             navigate('/captain-home')
           }
