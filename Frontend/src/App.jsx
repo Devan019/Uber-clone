@@ -9,6 +9,7 @@ import HomeMain from './pages/HomeMain'
 import CaptainHome from './pages/CaptainHome'
 import CaptainRiding from './pages/CaptainRiding'
 import { useEffect } from 'react'
+import Ride from './components/Ride'
 function App() {
 
   const loadGoogleMapsScript = () => {
@@ -47,6 +48,7 @@ function App() {
         <Route path='/captain-login' element={<CaptainLogin />} />
         <Route path='/captain-home' element={<CaptainHome />} />
         <Route path='/captain-ride' element={< CaptainRiding />} />
+        <Route path='/ride' element={< Ride />} />
       </Routes>
     </>
   )

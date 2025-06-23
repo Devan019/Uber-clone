@@ -2,9 +2,10 @@ import React, { useContext } from 'react'
 import  { RideCon } from '../context/RideContext'
 
 
-const WaitingForDriver = (props) => {
+const WaitingForDriver = () => {
 
  const {ride, setride} = useContext(RideCon)
+  console.log(ride, "WaitingForDriver component");
 
   return (
     <div>

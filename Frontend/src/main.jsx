@@ -10,15 +10,15 @@ import CaptainContextProvider from './context/CaptainContext.jsx'
 
 
 createRoot(document.getElementById('root')).render(
-  <SocketContext>
-    <CaptainContextProvider>
-      <RideContext>
+  <RideContext>
+    <SocketContext>
+      <CaptainContextProvider>
         <UserContext>
           <BrowserRouter>
             <App />
           </BrowserRouter>
         </UserContext>
-      </RideContext>
-    </CaptainContextProvider>
-  </SocketContext>
+      </CaptainContextProvider>
+    </SocketContext>
+  </RideContext>
 )

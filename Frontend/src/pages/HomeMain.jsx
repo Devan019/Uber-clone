@@ -142,6 +142,14 @@ const HomeMain = () => {
                     },
                     (response, status) => {
                         if (status === "OK") {
+                            setDestination(place.name);
+                            rideRef.current = {
+                                ...ride,
+                                pickup: pickupRef.current.value,
+                                destination: place.name,
+                            };
+                            setride(rideRef.current);
+
                             directionsRendererRef.current.setDirections(response);
                         } else {
                             alert("Directions request failed: " + status);
@@ -229,7 +237,7 @@ const HomeMain = () => {
     useGSAP(() => {
         if (isConformRide) {
             gsap.to(conformRide.current, {
-                height: '100%'
+                height: '70%'
             })
             gsap.to('.ini', {
                 opacity: 1,
@@ -275,12 +283,12 @@ const HomeMain = () => {
             return {
                 ...prevride,
                 pickupCordinates: {
-                    ltd: getPickupCordinates.data.corrinates.ltd,
-                    lng: getPickupCordinates.data.corrinates.lng
+                    ltd: getPickupCordinates.data.corrinates?.ltd,
+                    lng: getPickupCordinates.data.corrinates?.lng
                 },
                 destinationCordinates: {
-                    ltd: getDestinationCordinates.data.corrinates.ltd,
-                    lng: getDestinationCordinates.data.corrinates.lng
+                    ltd: getDestinationCordinates.data.corrinates?.ltd,
+                    lng: getDestinationCordinates.data.corrinates?.lng
                 }
             }
         })
@@ -422,15 +430,25 @@ const HomeMain = () => {
 
     useEffect(() => {
         reciveMessage("reciveRideRequest", ({name, ride, IAmSocketId}) => {
-            console.log("reciveRideRequest", name, ride, IAmSocketId);
+            
             if(ride){
-                console.log("reciveRideRequest conditon true", name, ride, IAmSocketId);
+               
                 setisConformRide(true);
                 rideRef.current = {
                     ...ride,
                     captainName : name,
+                    captainSocketId : IAmSocketId
                 }
                 setride(rideRef.current);
+            }
+        })
+
+        reciveMessage("sendStartRideNotification", (data) => {
+            const { ride } = data;
+            console.log("sendStartRideNotification", data);
+            if (ride) {
+                
+                navigate("/ride");
             }
         })
     }, [socket])
@@ -538,9 +556,12 @@ const HomeMain = () => {
                     <div ref={driverRef} className='absolute z-50 bg-zinc-100 w-full h-0'>
                         <LookingForDriver setdriverPanal={setdriverPanal} />
                     </div>
-                    <div ref={conformRide} className='absolute z-50 bg-zinc-100 w-full h-0'>
-                        <OtpSendToUser setIsConformRide={setisConformRide} ride={rideRef.current} />
-                    </div>
+                    {isConformRide && <div ref={conformRide} className='absolute z-50 bg-zinc-100 w-full h-0'>
+                        <OtpSendToUser 
+                        setDriverPanal = {setdriverPanal}
+                        setlookingForDriverPanal={setlookingForDriverPanal}
+                        setIsConformRide={setisConformRide} ride={rideRef.current} />
+                    </div>}
                 </div>
             </div>
         </div>

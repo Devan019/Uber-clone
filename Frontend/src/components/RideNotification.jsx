@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import { RideCon } from '../context/RideContext'
+import displayDistance from '../lib/displayDistance'
 
 const RideNotification = ({setShowRideNotification , setShowConformRide, name, ride}) => {
-
 
     return (
         <div>
@@ -17,21 +17,21 @@ const RideNotification = ({setShowRideNotification , setShowConformRide, name, r
                     <img className='h-12 rounded-full object-cover w-12' src="https://i.pinimg.com/236x/af/26/28/af26280b0ca305be47df0b799ed1b12b.jpg" alt="" />
                     <h2 className='text-lg font-medium'>{name}</h2>
                 </div>
-                <h5 className='text-lg font-semibold'>{ride.DistanceBtwnCapToPickup} KM</h5>
+                <h5 className='text-lg font-semibold'>{displayDistance(ride.DistanceBtwnCapToPickup)}</h5>
             </div>
             <div className='flex gap-2 justify-between flex-col items-center'>
                 <div className='w-full mt-5'>
                     <div className='flex items-center gap-5 p-3 border-b-2'>
                         <i className="ri-map-pin-user-fill"></i>
                         <div>
-                            <h3 className='text-lg font-medium'>562/11-A</h3>
+                            
                             <p className='text-sm -mt-1 text-gray-600'>{ride.pickup}</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-5 p-3 border-b-2'>
                         <i className="text-lg ri-map-pin-2-fill"></i>
                         <div>
-                            <h3 className='text-lg font-medium'>562/11-A</h3>
+                            
                             <p className='text-sm -mt-1 text-gray-600'>{ride.destination}</p>
                         </div>
                     </div>

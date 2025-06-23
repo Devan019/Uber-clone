@@ -125,8 +125,11 @@ const CaptainHome = () => {
           ltd: capltdRef.current,
           lng: caplngRef.current
         },
-        DistanceBtwnCapToPickup: distance
+        DistanceBtwnCapToPickup: distance,
+        userScoketId: data.IAmSocketId
       }
+
+      setride(rideDataRef.current);
 
       setname(data.name);
       setShowRideNotification(true);
@@ -200,12 +203,7 @@ const CaptainHome = () => {
     }
   }, [showConformRide])
 
-  useEffect(() => {
-    // setTimeout(() => {
-    //   setShowRideNotification(true);
-    // }, 1000);
 
-  }, [showRideNotification])
 
 
   return (
@@ -244,6 +242,7 @@ const CaptainHome = () => {
       <div ref={ConfromRideRef} className='absolute z-50 bg-zinc-100 w-full h-0 overflow-hidden'>
         <ConformCaptainRide
           // isConformRide={isConformRide}
+          userScoketId={userScoketId}
           ride={rideDataRef.current}
           setShowConformRide={setShowConformRide}
           setShowRideNotification={setShowRideNotification}
